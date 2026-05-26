@@ -141,13 +141,13 @@
   <div class="header-meta">
     <p>Based on the <a href="https://changing-transport.org/tracker/" target="_blank">NDC Transport Tracker</a>, a joint database by GIZ and SLOCAT. For a detailed assessment, see our report <a href="https://slocat.net/ndcs/" target="_blank"><em>Is transport on track for 1.5°C? Insights from the new NDCs</em></a>.</p>
   </div>
-  <div class="data-date">Data as of 20 May 2026</div>
+  <div class="data-date">Data as of 26 May 2026</div>
 </div>
 
 <div class="global-band">
-  <div class="global-stat"><span class="num">118</span><span class="label">third-generation NDCs submitted as of 20 May 2026</span></div>
+  <div class="global-stat"><span class="num">118</span><span class="label">third-generation NDCs submitted as of 26 May 2026</span></div>
   <div class="global-band-divider"></div>
-  <div class="global-stat"><span class="num">85%</span><span class="label">of all UNFCCC Parties represented</span></div>
+  <div class="global-stat"><span class="num">85%</span><span class="label">of all potential NDC submissions</span></div>
   <div class="global-band-divider"></div>
   <div class="global-stat"><span class="num">88%</span><span class="label">include actions to mitigate transport emissions</span></div>
   <div class="global-band-divider"></div>
@@ -510,24 +510,6 @@ function renderDashboard(region) {
           </div>
         </div>
       </div>
-
-      <div class="chart-wrapper">
-        <div class="chart-title">Action Categories to Mitigate Transport Emissions</div>
-        <div class="chart-subtitle">Number of actions for transport mitigation action categories</div>
-        <div class="tab-row">
-          <button class="tab-btn active" onclick="switchTab(this,'tab-ms-${tabId}')">Mode Shift</button>
-          <button class="tab-btn" onclick="switchTab(this,'tab-ts-${tabId}')">Transport System</button>
-        </div>
-        <div id="tab-ms-${tabId}" class="tab-panel active">
-          <div class="detail-grid">
-            ${Object.entries(data.mode_shift_detail).map(([k,v])=>`<div class="detail-card"><span class="dc-num">${v}</span><div class="dc-lbl">${k}</div></div>`).join('')}
-          </div>
-        </div>
-        <div id="tab-ts-${tabId}" class="tab-panel">
-          <div class="detail-grid">
-            ${Object.entries(data.transport_sys_detail).map(([k,v])=>`<div class="detail-card"><span class="dc-num">${v}</span><div class="dc-lbl">${k}</div></div>`).join('')}
-          </div>
-        </div>
       </div>
     </div>
   </div>`;
@@ -629,7 +611,7 @@ function renderDashboard(region) {
 
   html += `
   <div class="footnote">
-    <p>* Third-generation NDCs reflect the current generation of climate action plans submitted by countries to the UNFCCC since November 2024. Data covers submissions as of 20 May 2026. Source: <a href="https://changing-transport.org/tracker/" target="_blank">NDC Transport Tracker</a> by GIZ and SLOCAT.</p>
+    <p>* Third-generation NDCs reflect the current generation of climate action plans submitted by countries to the UNFCCC since November 2024. Data covers submissions as of 26 May 2026. Source: <a href="https://changing-transport.org/tracker/" target="_blank">NDC Transport Tracker</a> by GIZ and SLOCAT. This dashboard was generated in Excel and then transformed to this online version with Claude (Sonnet 4.6).</p>
   </div>`;
 
   document.getElementById('dashContent').innerHTML = html;
