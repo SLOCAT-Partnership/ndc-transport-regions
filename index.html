@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Regional Insights on Transport in Third-Generation NDCs</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
 <style>
   :root {
     --teal-header: #cdf0ff;
-    --teal-mito: #CDF0FF;
+    --teal-mito: #cdf0ff;
     --blue-adapt: #CDF0FF;
-    --teal-dark: #496976;
+    --teal-dark: #526069;
     --teal-mid: #f8bc1c;
-    --text-dark: #192429;
+    --text-dark: #526069;
     --text-mid: #3D5A65;
     --text-light: #6B8E9A;
     --border: #D6EDF5;
@@ -69,7 +69,7 @@
   .section-header-pill { display: inline-block; padding: 4px 14px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
   .pill-mito { background: var(--teal-mito); color: var(--teal-dark); }
   .pill-adapt { background: var(--blue-adapt); color: #0a4a6b; }
-  .pill-asi { background: #f0f7e8; color: #2a6040; }
+  .pill-asi { background: #F8BC1C; color: #0a4a6b; }
 
   .chart-wrapper { background: white; border: 1.5px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 20px; }
   .chart-title { font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 6px; }
@@ -450,7 +450,7 @@ function renderDashboard(region) {
   if (data.ghg_countries.length > 0) {
     html += `
     <div class="chart-wrapper" style="margin-top:0">
-      <div class="chart-title">Transport GHG Mitigation Targets — Country Overview</div>
+      <div class="chart-title">Transport GHG Mitigation Targets by Countries within the Region</div>
       <div class="chart-subtitle">${data.ghg_targets} NDC${data.ghg_targets!==1?'s':''} from the region feature explicit transport GHG mitigation targets</div>
       <div style="overflow-x:auto"><table class="target-table">
         <thead><tr><th>Country</th><th>Targeted Reductions in Transport Greenhouse Gas Emissions</th></tr></thead>
@@ -468,7 +468,7 @@ function renderDashboard(region) {
     <div class="section-header-pill pill-asi">Avoid–Shift–Improve Framework</div>
     <div class="two-col">
       <div class="chart-wrapper">
-        <div class="chart-title">Avoid-Shift-Improve Distribution — ${region} vs. Global</div>
+        <div class="chart-title">Avoid-Shift-Improve Distribution: ${region} vs. Global</div>
         <div class="chart-subtitle">Share of mitigation actions by Avoid, Shift and Improve</div>
         <div class="stacked-bar-wrap">
           <div class="stacked-bar-label">${region}</div>
@@ -597,7 +597,7 @@ function renderDashboard(region) {
   if (data.adapt_countries.length > 0) {
     html += `
     <div class="chart-wrapper" style="margin-top:0">
-      <div class="chart-title">Transport Adaptation and Resilience Targets by Region</div>
+      <div class="chart-title">Transport Adaptation and Resilience Targets by Countries within the Region</div>
       <div class="chart-subtitle">${data.adapt_countries.length} NDC${data.adapt_countries.length!==1?'s':''} from the region feature specific transport adaptation or resilience targets</div>
       <div style="overflow-x:auto"><table class="target-table">
         <thead><tr><th>Country</th><th>Transport Adaptation and Resilience Targets</th></tr></thead>
