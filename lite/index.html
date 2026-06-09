@@ -1,1 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Regional Insights on Transport in Third-Generation NDCs</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal-header: #cdf0ff;
+    --teal-mito: #CDF0FF;
+    --blue-adapt: #CDF0FF;
+    --teal-dark: #496976;
+    --teal-mid: #f8bc1c;
+    --text-dark: #192429;
+    --text-mid: #3D5A65;
+    --text-light: #6B8E9A;
+    --border: #D6EDF5;
+    --white: #ffffff;
+    --surface: #F7FBFD;
+    --avoid-color: #9be2ff;
+    --shift-color: #5bbcd8;
+    --improve-color: #0a5a80;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--white); color: var(--text-dark); line-height: 1.6; font-size: 15px; }
+
+  .page-header { background: var(--teal-header); padding: 40px 48px 32px; border-bottom: 2px solid #a8ddf0; }
+  .header-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--teal-dark); margin-bottom: 10px; }
+  .header-title { font-family: 'DM Serif Display', serif; font-size: clamp(24px, 3.5vw, 38px); color: var(--text-dark); line-height: 1.15; max-width: 720px; margin-bottom: 18px; }
+  .header-meta { font-size: 13px; color: var(--text-mid); max-width: 740px; line-height: 1.55; }
+  .header-meta a { color: var(--teal-dark); text-decoration: underline; text-underline-offset: 2px; }
+  .data-date { display: inline-block; background: white; border: 1px solid #a8ddf0; border-radius: 3px; padding: 3px 9px; font-size: 12px; font-weight: 500; color: var(--teal-dark); margin-top: 12px; }
+
+  .global-band { background: var(--text-dark); color: white; padding: 18px 48px; display: flex; align-items: center; gap: 32px; flex-wrap: wrap; }
+  .global-stat { display: flex; align-items: baseline; gap: 8px; }
+  .global-stat .num { font-family: 'DM Serif Display', serif; font-size: 28px; color: var(--teal-header); line-height: 1; }
+  .global-stat .label { font-size: 13px; color: #a8d8e8; max-width: 200px; line-height: 1.3; }
+  .global-band-divider { width: 1px; height: 36px; background: rgba(255,255,255,0.15); }
+
+  .selector-bar { padding: 24px 48px 0; display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .selector-label { font-size: 13px; font-weight: 500; color: var(--text-mid); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+  .region-btn { font-family: 'DM Sans', sans-serif; font-size: 13.5px; font-weight: 500; padding: 7px 18px; border-radius: 24px; border: 1.5px solid var(--border); background: white; color: var(--text-mid); cursor: pointer; transition: all 0.18s ease; white-space: nowrap; }
+  .region-btn:hover { border-color: var(--teal-mid); color: var(--teal-dark); background: #f0f9fd; }
+  .region-btn.active { background: var(--teal-dark); border-color: var(--teal-dark); color: white; box-shadow: 0 2px 8px rgba(0,121,140,0.25); }
+
+  .main-content { padding: 32px 48px 60px; max-width: 1200px; }
+
+  .region-header { margin-bottom: 16px; animation: fadeSlide 0.35s ease; }
+  @keyframes fadeSlide { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  .region-title { font-family: 'DM Serif Display', serif; font-size: clamp(22px, 3vw, 32px); color: var(--text-dark); margin-bottom: 4px; }
+  .region-subtitle { font-size: 13.5px; color: var(--text-light); font-weight: 400; margin-bottom: 14px; }
+
+  .region-summary { background: var(--surface); border-left: 3px solid var(--teal-mid); border-radius: 0 8px 8px 0; padding: 16px 20px; margin-bottom: 28px; font-size: 14px; color: var(--text-mid); line-height: 1.65; animation: fadeSlide 0.35s ease 0.04s both; }
+  .region-summary strong { color: var(--text-dark); font-weight: 600; }
+
+  .stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; margin-bottom: 36px; animation: fadeSlide 0.35s ease 0.07s both; }
+  .stat-card { background: var(--surface); border: 1.5px solid var(--border); border-radius: 10px; padding: 20px 22px; }
+  .stat-card .card-label { font-size: 11.5px; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; color: var(--text-light); margin-bottom: 10px; }
+  .stat-card .card-main { display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px; }
+  .stat-card .card-num { font-family: 'DM Serif Display', serif; font-size: 36px; color: var(--teal-dark); line-height: 1; }
+  .stat-card .card-denom { font-size: 13px; color: var(--text-light); }
+  .stat-card .card-sub { font-size: 12.5px; color: var(--text-mid); line-height: 1.4; }
+  .stat-card .share-bar { height: 4px; background: var(--border); border-radius: 2px; margin-top: 10px; overflow: hidden; }
+  .stat-card .share-fill { height: 100%; border-radius: 2px; background: var(--teal-mid); transition: width 0.6s ease; }
+
+  .section-intro { font-size: 14px; color: var(--text-mid); margin-bottom: 22px; line-height: 1.5; }
+  .section-block { margin-bottom: 44px; animation: fadeSlide 0.35s ease 0.1s both; }
+  .section-header-pill { display: inline-block; padding: 4px 14px; border-radius: 3px; font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; }
+  .pill-mito { background: var(--teal-mito); color: var(--teal-dark); }
+  .pill-adapt { background: var(--blue-adapt); color: #0a4a6b; }
+  .pill-asi { background: #f0f7e8; color: #2a6040; }
+
+  .chart-wrapper { background: white; border: 1.5px solid var(--border); border-radius: 12px; padding: 24px 28px; margin-bottom: 20px; }
+  .chart-title { font-size: 14px; font-weight: 600; color: var(--text-dark); margin-bottom: 6px; }
+  .chart-subtitle { font-size: 12.5px; color: var(--text-light); margin-bottom: 20px; line-height: 1.4; }
+
+  /* DUAL MINI BARS — region vs global comparison */
+  .dual-bar-row { display: flex; flex-direction: column; gap: 3px; margin-bottom: 14px; }
+  .dual-label { font-size: 12.5px; font-weight: 600; color: var(--text-dark); margin-bottom: 4px; }
+  .dual-bars { display: flex; flex-direction: column; gap: 3px; }
+  .mini-bar-row { display: flex; align-items: center; gap: 8px; }
+  .mini-bar-label { font-size: 11.5px; color: var(--text-light); width: 52px; flex-shrink: 0; text-align: right; }
+  .mini-bar-track { flex: 1; height: 14px; background: #f0f6f9; border-radius: 3px; overflow: hidden; }
+  .mini-bar-fill { height: 100%; border-radius: 3px; transition: width 0.7s cubic-bezier(0.4,0,0.2,1); }
+  .mini-bar-val { font-size: 12px; font-weight: 500; color: var(--text-dark); width: 34px; text-align: right; flex-shrink: 0; }
+
+  /* HORIZONTAL BAR — for mix/share charts */
+  .hbar-chart { display: flex; flex-direction: column; gap: 11px; }
+  .hbar-row { display: grid; grid-template-columns: 186px 1fr 52px; align-items: center; gap: 10px; }
+  .hbar-label { font-size: 12.5px; color: var(--text-mid); text-align: right; line-height: 1.3; }
+  .hbar-track { background: #f0f6f9; border-radius: 4px; overflow: hidden; position: relative; }
+  .hbar-fill { height: 100%; border-radius: 4px; transition: width 0.7s cubic-bezier(0.4,0,0.2,1); }
+  .hbar-val { font-size: 12.5px; font-weight: 600; color: var(--text-dark); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 860px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ASI */
+  .stacked-bar { height: 28px; border-radius: 5px; overflow: hidden; display: flex; margin-bottom: 4px; }
+  .stacked-seg { height: 100%; display: flex; align-items: center; justify-content: center; font-size: 11.5px; font-weight: 600; color: white; overflow: hidden; white-space: nowrap; transition: width 0.7s ease; }
+  .stacked-bar-wrap { margin-bottom: 16px; }
+  .stacked-bar-label { font-size: 12px; color: var(--text-light); margin-bottom: 6px; }
+  .asi-legend { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 20px; }
+  .asi-legend-item { display: flex; align-items: flex-start; gap: 10px; }
+  .asi-legend-color { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; margin-top: 2px; }
+  .asi-legend-text .l-title { font-size: 13px; font-weight: 600; color: var(--text-dark); }
+  .asi-legend-text .l-sub { font-size: 11.5px; color: var(--text-light); line-height: 1.4; }
+  .highlight-num { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--teal-dark); }
+
+  .detail-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(148px, 1fr)); gap: 12px; margin-top: 16px; }
+  .detail-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; text-align: center; }
+  .detail-card .dc-num { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--teal-dark); line-height: 1; display: block; margin-bottom: 4px; }
+  .detail-card .dc-lbl { font-size: 12px; color: var(--text-mid); line-height: 1.35; }
+
+  .tab-row { display: flex; gap: 0; border-bottom: 2px solid var(--border); margin-bottom: 20px; }
+  .tab-btn { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; padding: 9px 18px; background: none; border: none; border-bottom: 3px solid transparent; color: var(--text-light); cursor: pointer; margin-bottom: -2px; transition: all 0.15s; }
+  .tab-btn.active { color: var(--teal-dark); border-bottom-color: var(--teal-dark); font-weight: 600; }
+  .tab-btn:hover:not(.active) { color: var(--text-mid); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .target-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .target-table th { background: var(--surface); color: var(--text-mid); font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 9px 14px; text-align: left; border-bottom: 2px solid var(--border); }
+  .target-table td { padding: 10px 14px; border-bottom: 1px solid #e8f3f8; vertical-align: top; color: var(--text-dark); line-height: 1.5; }
+  .target-table tr:last-child td { border-bottom: none; }
+  .target-table tr:hover td { background: #f7fbfd; }
+  .country-name { font-weight: 600; white-space: nowrap; color: var(--teal-dark); }
+  .no-data { text-align: center; padding: 32px; color: var(--text-light); font-style: italic; font-size: 14px; background: var(--surface); border-radius: 8px; border: 1.5px dashed var(--border); }
+  .footnote { margin-top: 40px; padding-top: 20px; border-top: 1px solid var(--border); font-size: 12px; color: var(--text-light); line-height: 1.6; }
+  .footnote a { color: var(--teal-dark); }
+  .bar-legend { display: flex; gap: 16px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--text-mid); }
+  .legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+</style>
+</head>
+<body>
+
+
+<div class="global-band">
+  <div class="global-stat"><span class="num">118</span><span class="label">third-generation NDCs* submitted as of 26 May 2026</span></div>
+  <div class="global-band-divider"></div>
+  <div class="global-stat"><span class="num">85%</span><span class="label">of all potential NDC submissions</span></div>
+  <div class="global-band-divider"></div>
+  <div class="global-stat"><span class="num">88%</span><span class="label">include actions to mitigate transport emissions</span></div>
+  <div class="global-band-divider"></div>
+  <div class="global-stat"><span class="num">64%</span><span class="label">include actions on transport adaptation and resilience</span></div>
+</div>
+
+<div class="selector-bar">
+  <span class="selector-label">Select region:</span>
+  <button class="region-btn active" onclick="selectRegion('Africa')">Africa</button>
+  <button class="region-btn" onclick="selectRegion('Asia')">Asia</button>
+  <button class="region-btn" onclick="selectRegion('Europe')">Europe</button>
+  <button class="region-btn" onclick="selectRegion('Latin America and the Caribbean')">Latin America &amp; the Caribbean</button>
+  <button class="region-btn" onclick="selectRegion('North America')">North America</button>
+  <button class="region-btn" onclick="selectRegion('Oceania')">Oceania</button>
+</div>
+
+<div class="main-content" id="dashContent"></div>
+
+<script>
+const GLOBAL = { total_ndcs:118, ghg_targets_total:35, adapt_targets_total:18 };
+const MITO_COLORS = ['#CDF0FF','#7DD8EE','#3AACCF','#00798C','#005F72','#003D4D'];
+const ADAPT_COLORS = ['#9BE2FF','#5BBCD8','#2A8BAF','#0A5A80'];
+const MITO_KEYS = ['Mode shift & demand management','Transport system improvements','Energy efficiency','Electrification','Alternative fuels','Aviation & maritime'];
+const ADAPT_KEYS = ['Structural & Technical','Informational & Educational','Institutional & Regulatory','Other measures'];
+const GLOBAL_MITO = {'Mode shift & demand management':275,'Transport system improvements':174,'Energy efficiency':138,'Electrification':268,'Alternative fuels':119,'Aviation & maritime':92};
+const GLOBAL_MITO_TOTAL = 1066;
+const GLOBAL_ADAPT = {'Structural & Technical':142,'Informational & Educational':56,'Institutional & Regulatory':39,'Other measures':25};
+const GLOBAL_ADAPT_TOTAL = 262;
+
+const REGIONS = {
+  'Africa': {
+    summary: `Africa stands out as the region with the <strong>strong ambitions on transport adaptation</strong> in third-generation NDCs. With 32 of 54 Parties (59%) having submitted an NDC, the region accounts for <strong>31% of all transport GHG mitigation targets globally</strong> (11 of 35) and a striking <strong>55% of all transport adaptation targets worldwide</strong> (10 of 18) — far exceeding any other region. Mitigation actions are led by electrification and mode shift towards public transport, with energy efficiency featuring above the global average share (19.6% in region vs 12.9% globally). The region's strong adaptation engagement reflects the acute climate vulnerability of many African countries. Infrastructure resilience dominates adaptation actions.`,
+    submissions:32, total_parties:54, ghg_targets:11, adapt_targets:10,
+    mito_actions:{'Mode shift & demand management':54,'Transport system improvements':34,'Energy efficiency':43,'Electrification':56,'Alternative fuels':21,'Aviation & maritime':11},
+    mito_total:219,
+    adapt_actions:{'Structural & Technical':68,'Informational & Educational':28,'Institutional & Regulatory':18,'Other measures':11},
+    adapt_total:125,
+    asi:{avoid:0.0639,shift:0.2740,improve:0.6621},
+    mode_shift_detail:{'Transport demand mgmt':1,'Economic conditions':10,'Digital solutions':8,'Active mobility':5,'Public transport':30},
+    transport_sys_detail:{'Comprehensive planning':13,'Infrastructure improvement':9,'Freight efficiency':5,'Education & behaviour':7},
+    ghg_countries:[
+      {country:'Botswana',target:'429 Gg CO₂eq below 2030 BAU (146.78 Gg conditional)'},
+      {country:'Burkina Faso',target:'Reduction of 1,465 Gg CO₂eq by 2030; 2,358 Gg by 2035; 3,763 Gg by 2050'},
+      {country:'Comoros',target:'Land transport emissions 25% below BAU by 2035'},
+      {country:'Eswatini',target:'96.61 ktCO₂eq below 2035 BAU'},
+      {country:'Guinea',target:'20% below BAU levels by 2035'},
+      {country:'Liberia',target:'15% below 2035 BAU levels'},
+      {country:'Mauritania',target:'Avoid 4.34 Gg CO₂ by 2030; 5.39 by 2035; 7.75 by 2050 (unconditional + conditional)'},
+      {country:'Mauritius',target:'Avoided 30 Gg CO₂e/year vs 2035 BAU; decarbonise public transport by 2035'},
+      {country:'Seychelles',target:'30% below 2035 BAU (117 kt CO₂e reduction)'},
+      {country:'Sierra Leone',target:'16.2% below BAU levels by 2035'},
+      {country:'Somalia',target:'33% below 2035 BAU'}
+    ],
+    adapt_countries:[
+      {country:'Burundi',target:'Promote electric mobility; develop active transport infrastructure in Bujumbura and nationally; develop Lake Tanganyika transport corridor'},
+      {country:"Côte d'Ivoire",target:'Ensure that at least 60% of newly constructed or rehabilitated roads in flood-prone areas are passable by 2035'},
+      {country:'Eswatini',target:'Ensure that destroyed and damaged critical infrastructure (esp. roads and crossings) not to exceed 30 per year by 2035'},
+      {country:'Ethiopia',target:'Raise the share of major transport infrastructure integrating climate change from 50% (2025) to 100% by 2035'},
+      {country:'Lesotho',target:'Revise 10 climate-proof codes to strengthen road and public infrastructure standards by 2025'},
+      {country:'Liberia',target:'Implement climate-resilient highways and green-grey coastal infrastructure; establish national climate-related transport monitoring system by 2035'},
+      {country:'Mauritius',target:'Upgrade 100 km of roads and drains to flood-resilient standards by 2030 and 250 km by 2035'},
+      {country:'Rwanda',target:'Reduce landslide-vulnerable road length; achieve a 23% public transport share by 2030; establish 22 early warning systems by 2035'},
+      {country:'Sao Tome & Principe',target:'Rehabilitate 50% of roads and bridges in high-risk areas by 2035; replace 75% of wooden boats with fibre boats'},
+      {country:'Zambia',target:'Rehabilitate 50 km of tramways; electrify 30% of railway lines by 2030; modernise 1,248 km Zambia Railways modernised'}
+    ]
+  },
+
+  'Asia': {
+    summary: `Asia accounts for the <strong>largest amount of transport mitigation actions</strong> of any region, with 303 actions recorded across 32 NDCs (<strong>28% of all global transport mitigation actions</strong>). Mode shift, electrification and transport system improvements are all strongly represented. Seven NDCs include transport greenhouse gas mitigation targets — second only to Africa. Transport adaptation targets were identified in only 3 countries.`,
+    submissions:32, total_parties:48, ghg_targets:7, adapt_targets:3,
+    mito_actions:{'Mode shift & demand management':83,'Transport system improvements':55,'Energy efficiency':33,'Electrification':73,'Alternative fuels':38,'Aviation & maritime':21},
+    mito_total:303,
+    adapt_actions:{'Structural & Technical':28,'Informational & Educational':13,'Institutional & Regulatory':9,'Other measures':7},
+    adapt_total:57,
+    asi:{avoid:0.0693,shift:0.2904,improve:0.6403},
+    mode_shift_detail:{'Transport demand mgmt':8,'Economic conditions':17,'Digital solutions':13,'Active mobility':12,'Public transport':33},
+    transport_sys_detail:{'Comprehensive planning':12,'Infrastructure improvement':19,'Freight efficiency':17,'Education & behaviour':7},
+    ghg_countries:[
+      {country:'Bangladesh',target:'7.74% unconditional + 14.03% conditional below 2035 BAU (21.77% total vs BAU)'},
+      {country:'Georgia',target:'20% below BAU by 2030; 25% below BAU by 2035'},
+      {country:'Kazakhstan',target:'8.11% below 1990 levels by 2035 (−2.11 Mt CO₂eq)'},
+      {country:'Nepal',target:'1,426.22 GgCO₂eq below 2030; 2,731.57 GgCO₂eq by 2035'},
+      {country:'Sri Lanka',target:'4.8% below 2035 BAU (1.5% unconditional; 3.3% conditional)'},
+      {country:'Thailand',target:'Reduce from 76.8 MtCO₂eq (2019) to 54.2 by 2035 (−22.6 Mt)'},
+      {country:'United Arab Emirates',target:'20% below 2019 levels by 2035 (24.2 Mt CO₂eq)'}
+    ],
+    adapt_countries:[
+      {country:'Armenia',target:'Incorporate climate-proof planning in all national infrastructure projects by 2035, with participatory processes'},
+      {country:'Cambodia',target:'Repair and incorporate climate-proofing standards in 5,000 km of roads; built 300 km new roads; construct 5% with green belts by 2035'},
+      {country:'Nepal',target:'Introduce climate-resilient regulations for transport infrastructure; implement early warning systems on major highways by 2030'}
+    ]
+  },
+
+  'Europe': {
+    summary: `Nearly every European country has submitted a third-generation NDC. However, the region's transport content features a <strong>relatively narrow set of actions</strong> and the fewest transport GHG mitigation targets (4 NDCs). Most European countries address climate commitments through the EU's comprehensive legislative framework. The Avoid-Shift-Improve breakdown reveals a distinctive profile: Europe has the <strong>highest Avoid share of any region</strong> (13.2% vs 7.5% globally), indicating greater attention to demand management. Economic instruments and mode shift dominate mitigation actions, consistent with the EU's vehicle emissions regulations.`,
+    submissions:41, total_parties:46, ghg_targets:4, adapt_targets:0,
+    mito_actions:{'Mode shift & demand management':24,'Transport system improvements':6,'Energy efficiency':8,'Electrification':21,'Alternative fuels':10,'Aviation & maritime':7},
+    mito_total:76,
+    adapt_actions:{'Structural & Technical':5,'Informational & Educational':2,'Institutional & Regulatory':2,'Other measures':1},
+    adapt_total:10,
+    asi:{avoid:0.1316,shift:0.1711,improve:0.6974},
+    mode_shift_detail:{'Transport demand mgmt':2,'Economic conditions':11,'Digital solutions':2,'Active mobility':2,'Public transport':7},
+    transport_sys_detail:{'Comprehensive planning':3,'Infrastructure improvement':2,'Freight efficiency':0,'Education & behaviour':1},
+    ghg_countries:[
+      {country:'Andorra',target:'50% below BAU levels in domestic transport emissions by 2030'},
+      {country:'European Union',target:'−55% new cars & −50% new vans by 2030 vs 2021; 100% by 2035. −45% heavy-duty vehicles by 2030; 90% for urban buses by 2030'},
+      {country:'Republic of Moldova',target:'52% below 1990 levels by 2030'},
+      {country:'Switzerland',target:'41% below 1990 levels by 2035; 57% by 2040; 100% by 2050'}
+    ],
+    adapt_countries:[]
+  },
+
+  'Latin America and the Caribbean': {
+    summary: `Latin America and the Caribbean shows a <strong>strong and diverse approaches on climate action in transport</strong>, with 278 actions across 24 NDCs (73% of Parties). The region stands out for the <strong>highest share of transport system improvements</strong> of any region (22.3% in the region vs 16.3% globally), driven by  a focus on comprehensive transport planning (28 actions) and freight efficiency (16 actions). Electrification and mode shift towards public transport are the top mitigation categories. The <strong>Shift component of the Avoid-Shift-Improve framework is higher</strong> than the global average (34.5% vs 27.0%), reflecting ambitions for modal shift at scale. Six NDCs include transport GHG mitigation targets, and three feature adaptation targets.`,
+    submissions:24, total_parties:33, ghg_targets:6, adapt_targets:3,
+    mito_actions:{'Mode shift & demand management':72,'Transport system improvements':62,'Energy efficiency':29,'Electrification':73,'Alternative fuels':25,'Aviation & maritime':17},
+    mito_total:278,
+    adapt_actions:{'Structural & Technical':22,'Informational & Educational':7,'Institutional & Regulatory':5,'Other measures':1},
+    adapt_total:35,
+    asi:{avoid:0.0683,shift:0.3453,improve:0.5863},
+    mode_shift_detail:{'Transport demand mgmt':9,'Economic conditions':10,'Digital solutions':8,'Active mobility':11,'Public transport':34},
+    transport_sys_detail:{'Comprehensive planning':28,'Infrastructure improvement':10,'Freight efficiency':16,'Education & behaviour':8},
+    ghg_countries:[
+      {country:'Belize',target:'127 ktCO₂e avoided by 2030; 312 ktCO₂e by 2035'},
+      {country:'Chile',target:'Transport emissions to peak by 2030'},
+      {country:'El Salvador',target:'313 ktCO₂eq unconditional; 618 ktCO₂eq conditional below BAU by 2035'},
+      {country:'Saint Lucia',target:'22% below 2010 levels by 2035 (transport and energy combined)'},
+      {country:'Trinidad and Tobago',target:'−30% public transport emissions vs 2013 by 2030; −50% total transport emissions by 2035'},
+      {country:'Venezuela',target:'−50% airport ground operations vs 2022 by 2030; −25% maritime emissions vs 2022 by 2030'}
+    ],
+    adapt_countries:[
+      {country:'Chile',target:'Introduce a methodological framework for climate resilience in all new urban infrastructure by 2030; incorporate resilience criteria in 50% of new public infrastructure by 2035'},
+      {country:'Paraguay',target:'Integrate climate risk assessments in at least 2 road projects by 2030; implement 2 dredging projects on Paraná and Paraguay rivers'},
+      {country:'Suriname',target:'Conduct climate risk screening for all new major infrastructure; climate-proof 150 km of vulnerable roads; reactivate 3 inland ferry systems'}
+    ]
+  },
+
+  'North America': {
+    summary: `North America is represented by just <strong>2 Parties</strong> (Canada and the United States) both of which have submitted third-generation NDCs. The two NDCs together record <strong>59 transport mitigation actions</strong>. Mitigation actions focus on mode shift and electrification (19 actions each), with actions associated to economic instruments and public transport. The region stands out for the <strong>absence of transport greenhouse gas mitigation targets and transport adaptation targets</strong> in third-generation NDC submissions.`,
+    submissions:2, total_parties:2, ghg_targets:0, adapt_targets:0,
+    mito_actions:{'Mode shift & demand management':19,'Transport system improvements':9,'Energy efficiency':1,'Electrification':19,'Alternative fuels':7,'Aviation & maritime':4},
+    mito_total:59,
+    adapt_actions:{'Structural & Technical':1,'Informational & Educational':0,'Institutional & Regulatory':0,'Other measures':0},
+    adapt_total:1,
+    asi:{avoid:0.1017,shift:0.2542,improve:0.6441},
+    mode_shift_detail:{'Transport demand mgmt':3,'Economic conditions':5,'Digital solutions':1,'Active mobility':3,'Public transport':7},
+    transport_sys_detail:{'Comprehensive planning':3,'Infrastructure improvement':1,'Freight efficiency':2,'Education & behaviour':3},
+    ghg_countries:[],
+    adapt_countries:[]
+  },
+
+  'Oceania': {
+    summary: `Oceania presents a <strong>distinctive transport profile</strong> shaped by its island geography and maritime dependence. Thirteen of 16 Parties (81%) have submitted third-generation NDCs. The region records the <strong>highest share of aviation and maritime actions</strong> of any region (32 actions representing 24.4% of transport actions in the region, compared to just 8.6% globally), reflecting the critical role of shipping and aviation connectivity for Pacific Island states. The region records the <strong>highest Improve share in the Avoid-Shift-Improve framework</strong> (80.2% in the region vs 65.5% globally). Energy efficiency is above the global average share (18.3% vs 12.9%). Seven NDCs include transport GHG mitigation targets while 2 NDCs feature transport adaptation and resilience targets.`,
+    submissions:13, total_parties:16, ghg_targets:7, adapt_targets:2,
+    mito_actions:{'Mode shift & demand management':23,'Transport system improvements':8,'Energy efficiency':24,'Electrification':26,'Alternative fuels':18,'Aviation & maritime':32},
+    mito_total:131,
+    adapt_actions:{'Structural & Technical':18,'Informational & Educational':6,'Institutional & Regulatory':5,'Other measures':5},
+    adapt_total:34,
+    asi:{avoid:0.0763,shift:0.1221,improve:0.8015},
+    mode_shift_detail:{'Transport demand mgmt':2,'Economic conditions':2,'Digital solutions':3,'Active mobility':11,'Public transport':5},
+    transport_sys_detail:{'Comprehensive planning':6,'Infrastructure improvement':0,'Freight efficiency':0,'Education & behaviour':2},
+    ghg_countries:[
+      {country:'Fiji',target:'14% less road transport; 40% maritime; 10% domestic aviation vs BAU by 2035'},
+      {country:'Marshall Islands',target:'40% below 2010 domestic shipping by 2030; complete decarbonisation by 2050'},
+      {country:'Nauru',target:'New ships: 50% CO₂ reduction per tonne/km by 2050'},
+      {country:'Samoa',target:'Transport (land & marine): 2.68 Gg CO₂e below 2020 level'},
+      {country:'Solomon Islands',target:'−14.1 kt/year land transport; −16.6 kt/year maritime emissions by 2035'},
+      {country:'Tonga',target:'26 GgCO₂e below 2006 levels by 2030; 45 GgCO₂e by 2035'},
+      {country:'Vanuatu',target:'312.6 kt CO₂eq vs 2035 BAU; pursue 100% carbon-free maritime transport by 2050'}
+    ],
+    adapt_countries:[
+      {country:'Solomon Islands',target:'Repair, replace or built 46 wharves and jetties'},
+      {country:'Vanuatu',target:'Ensure delivery of essential services (including transport) to all people affected by climate displacement by 2035'}
+    ]
+  }
+};
+
+let currentRegion = 'Africa';
+
+function selectRegion(region) {
+  currentRegion = region;
+  document.querySelectorAll('.region-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('onclick') === `selectRegion('${region}')`);
+  });
+  renderDashboard(region);
+}
+
+function pct(n, total) { return total > 0 ? Math.round((n / total) * 100) : 0; }
+function fmt_pct(v) { return (v * 100).toFixed(1) + '%'; }
+
+function renderDashboard(region) {
+  const data = REGIONS[region];
+  const regionShare = pct(data.submissions, data.total_parties);
+  const ghgShare = pct(data.ghg_targets, GLOBAL.ghg_targets_total);
+  const adaptShare = pct(data.adapt_targets, GLOBAL.adapt_targets_total);
+  const maxMitoGlobal = Math.max(...Object.values(GLOBAL_MITO));
+  const maxAdaptGlobal = Math.max(...Object.values(GLOBAL_ADAPT));
+  const tabId = region.replace(/[\s&,]/g,'_');
+
+  let html = `
+  <div class="region-header">
+    <h2 class="region-title">${region}</h2>
+    <p class="region-subtitle"><strong>Regional insights on transport in third-generation NDCs</strong></p>
+  </div>
+
+  <div class="region-summary">${data.summary}</div>
+
+  <div class="stat-cards">
+    <div class="stat-card">
+      <div class="card-label">Third-Generation NDC Submissions</div>
+      <div class="card-main"><span class="card-num">${data.submissions}</span><span class="card-denom">/ ${data.total_parties}</span></div>
+      <div class="card-sub">${regionShare}% of Parties in the region</div>
+      <div class="share-bar"><div class="share-fill" style="width:${regionShare}%"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="card-label">GHG Mitigation Targets</div>
+      <div class="card-main"><span class="card-num">${data.ghg_targets}</span><span class="card-denom">NDCs</span></div>
+      <div class="card-sub">${ghgShare}% of all third-generation NDCs with such targets (${GLOBAL.ghg_targets_total} total)</div>
+      <div class="share-bar"><div class="share-fill" style="width:${ghgShare}%; background:#00798C"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="card-label">Adaptation Targets</div>
+      <div class="card-main"><span class="card-num">${data.adapt_targets}</span><span class="card-denom">NDCs</span></div>
+      <div class="card-sub">${adaptShare}% of all third-generation NDCs with such targets (${GLOBAL.adapt_targets_total} total)</div>
+      <div class="share-bar"><div class="share-fill" style="width:${adaptShare}%; background:#2A8BAF"></div></div>
+    </div>
+    <div class="stat-card">
+      <div class="card-label">Transport Emission Mitigation Actions</div>
+      <div class="card-main"><span class="card-num">${data.mito_total}</span><span class="card-denom">actions</span></div>
+      <div class="card-sub">${pct(data.mito_total, GLOBAL_MITO_TOTAL)}% of all global transport mitigation actions</div>
+      <div class="share-bar"><div class="share-fill" style="width:${pct(data.mito_total,GLOBAL_MITO_TOTAL)}%"></div></div>
+    </div>
+  </div>
+
+  <!-- MITIGATION SECTION -->
+  <div class="section-block">
+    <div class="section-header-pill pill-mito">Actions to reduce transport emissions</div>
+    <div class="two-col">
+
+      <!-- LEFT: region vs global count comparison -->
+      <div class="chart-wrapper">
+        <div class="chart-title">Mitigation Actions: Region vs. Global</div>
+        <div class="chart-subtitle">Number of actions per category — region (solid) vs. all third-generation NDCs globally (faded)</div>
+        <div class="bar-chart">`;
+
+  MITO_KEYS.forEach((key, i) => {
+    const rv = data.mito_actions[key] || 0;
+    const gv = GLOBAL_MITO[key];
+    html += `
+      <div class="dual-bar-row">
+        <div class="dual-label">${key}</div>
+        <div class="dual-bars">
+          <div class="mini-bar-row">
+            <span class="mini-bar-label">${region}</span>
+            <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${pct(rv,maxMitoGlobal)}%;background:${MITO_COLORS[i]}"></div></div>
+            <span class="mini-bar-val">${rv}</span>
+          </div>
+          <div class="mini-bar-row">
+            <span class="mini-bar-label">Global</span>
+            <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${pct(gv,maxMitoGlobal)}%;background:${MITO_COLORS[i]};opacity:0.32"></div></div>
+            <span class="mini-bar-val" style="color:var(--text-light)">${gv}</span>
+          </div>
+        </div>
+      </div>`;
+  });
+
+  html += `</div>
+      </div>
+
+      <!-- RIGHT: mix as horizontal bar chart, with global reference -->
+      <div class="chart-wrapper">
+        <div class="chart-title">Mitigation Action Share per Category — ${region}</div>
+        <div class="chart-subtitle">Share of each category within the region (${data.mito_total} actions) and globally (faded)</div>
+        <div class="hbar-chart">`;
+
+  MITO_KEYS.forEach((key, i) => {
+    const rv = data.mito_actions[key] || 0;
+    const share = data.mito_total > 0 ? (rv / data.mito_total * 100) : 0;
+    const globalShare = (GLOBAL_MITO[key] / GLOBAL_MITO_TOTAL * 100);
+    html += `
+      <div class="hbar-row">
+        <div class="hbar-label">${key}</div>
+        <div style="display:flex;flex-direction:column;gap:3px;flex:1">
+          <div class="hbar-track" style="height:18px"><div class="hbar-fill" style="width:${Math.min(share,100)}%;background:${MITO_COLORS[i]};height:18px"></div></div>
+          <div class="hbar-track" style="height:10px"><div class="hbar-fill" style="width:${Math.min(globalShare,100)}%;background:${MITO_COLORS[i]};opacity:0.32;height:10px"></div></div>
+        </div>
+        <div class="hbar-val">${share.toFixed(1)}%</div>
+      </div>`;
+  });
+
+  html += `</div>
+        <div class="bar-legend" style="margin-top:16px">
+          <div class="legend-item"><div class="legend-dot" style="background:var(--teal-dark)"></div><span>Regional share</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:var(--teal-dark);opacity:0.35"></div><span>Global share</span></div>
+        </div>
+      </div>
+    </div>`;
+
+  // GHG targets table
+  if (data.ghg_countries.length > 0) {
+    html += `
+    <div class="chart-wrapper" style="margin-top:0">
+      <div class="chart-title">Transport GHG Mitigation Targets — Country Overview</div>
+      <div class="chart-subtitle">${data.ghg_targets} NDC${data.ghg_targets!==1?'s':''} from the region feature explicit transport GHG mitigation targets</div>
+      <div style="overflow-x:auto"><table class="target-table">
+        <thead><tr><th>Country</th><th>Targeted Reductions in Transport Greenhouse Gas Emissions</th></tr></thead>
+        <tbody>${data.ghg_countries.map(c=>`<tr><td class="country-name">${c.country}</td><td>${c.target}</td></tr>`).join('')}</tbody>
+      </table></div>
+    </div>`;
+  } else {
+    html += `<div class="no-data">No specific transport GHG mitigation targets identified in third-generation NDCs from this region.</div>`;
+  }
+  html += `</div>`;
+
+  // ASI SECTION
+  html += `
+  <div class="section-block">
+    <div class="section-header-pill pill-asi">Avoid–Shift–Improve Framework</div>
+    <div class="two-col">
+      <div class="chart-wrapper">
+        <div class="chart-title">Avoid-Shift-Improve Distribution — ${region} vs. Global</div>
+        <div class="chart-subtitle">Share of mitigation actions by Avoid, Shift and Improve</div>
+        <div class="stacked-bar-wrap">
+          <div class="stacked-bar-label">${region}</div>
+          <div class="stacked-bar">
+            <div class="stacked-seg" style="width:${(data.asi.avoid*100).toFixed(1)}%;background:var(--avoid-color)">${data.asi.avoid>0.06?fmt_pct(data.asi.avoid):''}</div>
+            <div class="stacked-seg" style="width:${(data.asi.shift*100).toFixed(1)}%;background:var(--shift-color)">${data.asi.shift>0.09?fmt_pct(data.asi.shift):''}</div>
+            <div class="stacked-seg" style="width:${(data.asi.improve*100).toFixed(1)}%;background:var(--improve-color)">${fmt_pct(data.asi.improve)}</div>
+          </div>
+        </div>
+        <div class="stacked-bar-wrap">
+          <div class="stacked-bar-label">Global</div>
+          <div class="stacked-bar" style="opacity:0.65">
+            <div class="stacked-seg" style="width:7.5%;background:var(--avoid-color)">7.5%</div>
+            <div class="stacked-seg" style="width:27.0%;background:var(--shift-color)">27.0%</div>
+            <div class="stacked-seg" style="width:65.5%;background:var(--improve-color)">65.5%</div>
+          </div>
+        </div>
+        <div class="asi-legend">
+          <div class="asi-legend-item">
+            <div class="asi-legend-color" style="background:var(--avoid-color)"></div>
+            <div class="asi-legend-text">
+              <div class="l-title">Avoid — <span class="highlight-num">${fmt_pct(data.asi.avoid)}</span></div>
+              <div class="l-sub">Reduce motorised travel demand</div>
+            </div>
+          </div>
+          <div class="asi-legend-item">
+            <div class="asi-legend-color" style="background:var(--shift-color)"></div>
+            <div class="asi-legend-text">
+              <div class="l-title">Shift — <span class="highlight-num">${fmt_pct(data.asi.shift)}</span></div>
+              <div class="l-sub">Modal shift to cleaner modes</div>
+            </div>
+          </div>
+          <div class="asi-legend-item">
+            <div class="asi-legend-color" style="background:var(--improve-color)"></div>
+            <div class="asi-legend-text">
+              <div class="l-title">Improve — <span class="highlight-num">${fmt_pct(data.asi.improve)}</span></div>
+              <div class="l-sub">Electrification and efficiency improvements</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>`;
+
+  // ADAPTATION SECTION
+  html += `
+  <div class="section-block">
+    <div class="section-header-pill pill-adapt">Transport Adaptation and Resilience</div>
+    <div class="two-col">
+
+      <!-- LEFT: region vs global count comparison -->
+      <div class="chart-wrapper">
+        <div class="chart-title">Adaptation Actions: Region vs. Global</div>
+        <div class="chart-subtitle">Number of actions per category — region (solid) vs. all third-generation NDCs globally (faded)</div>
+        <div class="bar-chart">`;
+
+  ADAPT_KEYS.forEach((key, i) => {
+    const rv = data.adapt_actions[key] || 0;
+    const gv = GLOBAL_ADAPT[key];
+    html += `
+      <div class="dual-bar-row">
+        <div class="dual-label">${key}</div>
+        <div class="dual-bars">
+          <div class="mini-bar-row">
+            <span class="mini-bar-label">${region}</span>
+            <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${pct(rv,maxAdaptGlobal)}%;background:${ADAPT_COLORS[i]}"></div></div>
+            <span class="mini-bar-val">${rv}</span>
+          </div>
+          <div class="mini-bar-row">
+            <span class="mini-bar-label">Global</span>
+            <div class="mini-bar-track"><div class="mini-bar-fill" style="width:${pct(gv,maxAdaptGlobal)}%;background:${ADAPT_COLORS[i]};opacity:0.32"></div></div>
+            <span class="mini-bar-val" style="color:var(--text-light)">${gv}</span>
+          </div>
+        </div>
+      </div>`;
+  });
+
+  html += `</div>
+      </div>
+
+      <!-- RIGHT: mix as horizontal bar chart -->
+      <div class="chart-wrapper">
+        <div class="chart-title">Adaptation and Resilience Action Share per Category — ${region}</div>
+        <div class="chart-subtitle">Share of each category within the region (${data.adapt_total} actions) and globally (faded)</div>`;
+
+  if (data.adapt_total > 0) {
+    html += `<div class="hbar-chart">`;
+    ADAPT_KEYS.forEach((key, i) => {
+      const rv = data.adapt_actions[key] || 0;
+      const share = (rv / data.adapt_total * 100);
+      const globalShare = (GLOBAL_ADAPT[key] / GLOBAL_ADAPT_TOTAL * 100);
+      html += `
+        <div class="hbar-row">
+          <div class="hbar-label">${key}</div>
+          <div style="display:flex;flex-direction:column;gap:3px;flex:1">
+            <div class="hbar-track" style="height:18px"><div class="hbar-fill" style="width:${Math.min(share,100)}%;background:${ADAPT_COLORS[i]};height:18px"></div></div>
+            <div class="hbar-track" style="height:10px"><div class="hbar-fill" style="width:${Math.min(globalShare,100)}%;background:${ADAPT_COLORS[i]};opacity:0.32;height:10px"></div></div>
+          </div>
+          <div class="hbar-val">${share.toFixed(1)}%</div>
+        </div>`;
+    });
+    html += `</div>
+        <div class="bar-legend" style="margin-top:16px">
+          <div class="legend-item"><div class="legend-dot" style="background:#2A8BAF"></div><span>Regional share</span></div>
+          <div class="legend-item"><div class="legend-dot" style="background:#2A8BAF;opacity:0.35"></div><span>Global share</span></div>
+        </div>
+        <div style="margin-top:20px;padding-top:16px;border-top:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:12px">
+          <div style="text-align:center;padding:12px;background:var(--surface);border-radius:8px;border:1px solid var(--border)">
+            <span style="font-family:'DM Serif Display',serif;font-size:28px;color:#0a5a80;display:block;line-height:1">${data.adapt_targets}</span>
+            <span style="font-size:12px;color:var(--text-mid);line-height:1.3;display:block;margin-top:4px">NDCs with adaptation targets</span>
+            <span style="font-size:11px;color:var(--text-light);display:block">${pct(data.adapt_targets,GLOBAL.adapt_targets_total)}% of ${GLOBAL.adapt_targets_total} globally</span>
+          </div>
+          <div style="text-align:center;padding:12px;background:var(--surface);border-radius:8px;border:1px solid var(--border)">
+            <span style="font-family:'DM Serif Display',serif;font-size:28px;color:#0a5a80;display:block;line-height:1">${data.adapt_total}</span>
+            <span style="font-size:12px;color:var(--text-mid);line-height:1.3;display:block;margin-top:4px">Total adaptation actions</span>
+            <span style="font-size:11px;color:var(--text-light);display:block">${pct(data.adapt_total,GLOBAL_ADAPT_TOTAL)}% of ${GLOBAL_ADAPT_TOTAL} globally</span>
+          </div>
+        </div>`;
+  } else {
+    html += `<div class="no-data" style="margin-top:8px">No transport adaptation actions recorded for this region.</div>`;
+  }
+
+  html += `</div></div>`;
+
+  if (data.adapt_countries.length > 0) {
+    html += `
+    <div class="chart-wrapper" style="margin-top:0">
+      <div class="chart-title">Transport Adaptation and Resilience Targets by Region</div>
+      <div class="chart-subtitle">${data.adapt_countries.length} NDC${data.adapt_countries.length!==1?'s':''} from the region feature specific transport adaptation or resilience targets</div>
+      <div style="overflow-x:auto"><table class="target-table">
+        <thead><tr><th>Country</th><th>Transport Adaptation and Resilience Targets</th></tr></thead>
+        <tbody>${data.adapt_countries.map(c=>`<tr><td class="country-name">${c.country}</td><td>${c.target}</td></tr>`).join('')}</tbody>
+      </table></div>
+    </div>`;
+  } else {
+    html += `<div class="no-data" style="margin-top:0">No specific transport adaptation targets identified in third-generation NDCs from this region.</div>`;
+  }
+  html += `</div>`;
+
+  html += `
+  <div class="footnote">
+    <p>* Third-generation NDCs reflect the current generation of climate action plans submitted by countries to the UNFCCC since November 2024. Data covers submissions as of 26 May 2026. Source: <a href="https://changing-transport.org/tracker/" target="_blank">NDC Transport Tracker</a> by GIZ and SLOCAT. This dashboard was generated in Excel and then transformed to this online version with Claude (Sonnet 4.6).</p>
+  </div>`;
+
+  document.getElementById('dashContent').innerHTML = html;
+}
+
+function switchTab(btn, targetId) {
+  const wrapper = btn.closest('.chart-wrapper');
+  wrapper.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  wrapper.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(targetId).classList.add('active');
+}
+
+renderDashboard('Africa');
+</script>
+</body>
+</html>
 
