@@ -356,21 +356,21 @@ function renderDashboard(region) {
       <div class="share-bar"><div class="share-fill" style="width:${regionShare}%"></div></div>
     </div>
     <div class="stat-card">
-      <div class="card-label">GHG Mitigation Targets</div>
+      <div class="card-label">Transport GHG Mitigation Targets</div>
       <div class="card-main"><span class="card-num">${data.ghg_targets}</span><span class="card-denom">NDCs</span></div>
       <div class="card-sub">${ghgShare}% of all third-generation NDCs with such targets (${GLOBAL.ghg_targets_total} total)</div>
       <div class="share-bar"><div class="share-fill" style="width:${ghgShare}%; background:#00798C"></div></div>
     </div>
     <div class="stat-card">
-      <div class="card-label">Adaptation Targets</div>
+      <div class="card-label">Transport Adaptation and Resilience Targets</div>
       <div class="card-main"><span class="card-num">${data.adapt_targets}</span><span class="card-denom">NDCs</span></div>
       <div class="card-sub">${adaptShare}% of all third-generation NDCs with such targets (${GLOBAL.adapt_targets_total} total)</div>
       <div class="share-bar"><div class="share-fill" style="width:${adaptShare}%; background:#2A8BAF"></div></div>
     </div>
     <div class="stat-card">
-      <div class="card-label">Transport Emission Mitigation Actions</div>
+      <div class="card-label">Actions to Mitigate Transport Emissions</div>
       <div class="card-main"><span class="card-num">${data.mito_total}</span><span class="card-denom">actions</span></div>
-      <div class="card-sub">${pct(data.mito_total, GLOBAL_MITO_TOTAL)}% of all global transport mitigation actions</div>
+      <div class="card-sub">${pct(data.mito_total, GLOBAL_MITO_TOTAL)}% of all global transport-related actions mitigating emissions</div>
       <div class="share-bar"><div class="share-fill" style="width:${pct(data.mito_total,GLOBAL_MITO_TOTAL)}%"></div></div>
     </div>
   </div>
