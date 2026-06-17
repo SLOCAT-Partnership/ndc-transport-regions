@@ -13,6 +13,8 @@ An interactive, single-file dashboard exploring how transport is represented acr
 
 This dashboard is developed by [SLOCAT Partnership](https://slocat.net) and draws on data from the [NDC Transport Tracker](https://changing-transport.org/tracker/), a joint initiative by GIZ and SLOCAT. It accompanies the report [*Is transport on track for 1.5°C? Insights from the new NDCs*](https://slocat.net/ndcs/).
 
+This dashboard is explained in this blog article [*Transport in the newest NDCs, region by region*](https://slocat.net/transport-in-the-newest-ndcs-region-by-region/), while also being embedded in the [SLOCAT NDCs Library](https://slocat.net/ndcs/).
+
 Data covers NDC submissions as of **26 May 2026**.
 
 ---
