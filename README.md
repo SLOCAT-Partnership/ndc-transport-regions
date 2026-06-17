@@ -2,7 +2,9 @@
 
 An interactive, single-file dashboard exploring how transport is represented across six world regions in third-generation Nationally Determined Contributions (NDCs), submitted to the UNFCCC under the Paris Agreement.
 
-**→ [View the live dashboard](https://slocat.github.io/your-repo-name/)**
+**→ [View the live dashboard]([https://slocat-partnership.github.io/ndc-transport-regions/lite/])**
+**→ [View the live light version dashboard]([https://slocat-partnership.github.io/ndc-transport-regions/lite/])**
+
 
 ---
 
